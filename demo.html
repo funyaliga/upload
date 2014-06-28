@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>fupload</title>
+	<style>
+		.progress{
+			position: relative;
+			width: 200px;
+			height: 20px;
+			border: 1px solid #cecece;
+			text-align: center;
+			background: #fff;
+		}
+		.progress .in{
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 0;
+			height: 100%;
+			background: red;
+		}
+
+		.fileBox{display: inline-block;
+width: 300px;
+height: 30px;
+line-height: 30px;
+background: #ddd;
+text-align: center;
+overflow: hidden;
+position: relative;}
+.fileLabel{
+	background: blue;
+}
+		#uploadFile{opacity: 0;
+filter: alpha(opacity=0);
+font-size: 100px;
+position: absolute;
+top: 0;
+right: 0;}
+
+
+.view{
+	width: 300px;
+	height: 300px;
+}
+.view img{
+	max-width: 100%;
+	max-height: 100%;
+	width: auto;
+	height: auto;
+	_width: 100%;
+}
+
+	</style>
+
+
+</head>
+<body>
+
+	<form method="post" action="" enctype="multipart/form-data">
+		<div class="fileBox">
+			<label class="fileLabel" for="uploadFile">File: </label><input type="file" id="uploadFile" name="Filedata" class="file" accept="image/*">
+		</div>
+		<div id="uploads">
+
+		</div>
+		<div class="progress">
+			图片上传中
+			<div class="in"></div>
+		</div>
+		<button class="fuploadBtn">xx</button>
+		<div class="view"></div>
+	</form>
+	<script type="text/javascript" src="http://192.168.1.222/cbd/cbdpin.no4e.com/js/web/jquery-1.8.3.min.js"></script>
+	<script type="text/javascript" src="jquery.ajaxfileupload.js"></script>
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+
+			$(".fuploadBtn").click(function(e){
+				e.preventDefault();
+				alert('fileLabel')
+				$(".fileLabel").trigger('click');
+			})
+
+			$("#uploadFile").fUpload({
+				action: 'http://192.168.1.222/cbd/cbdpin.no4e.com/index.php/web/index/upload_temp_file',
+				view: '.view',
+				onView: function(data){
+					alert(data);
+					$('.view').html('<img src="'+data+'" alt="" />');
+				},
+				onChange: function(filename){
+					// console.log(filename)
+				},
+				onSubmit: function(filename){
+					// console.log(filename,'onSubmit');
+					return {
+						text: 'xxx'
+					}
+				},
+				onprogress: function(data){
+					$('.progress .in').width(data+'%')
+				},
+				onComplete: function(filename, data) {
+				// for (var variable in data) {
+				// 	alert(variable+":"+data[variable])
+				// }
+					if(data.status && data.status == 1){
+						$("#uploads").append(
+							$("<img />").attr("src", data.file_name).attr("width", 200)
+						);
+					}
+				}
+			});
+		});
+
+	</script>
+
+</body>
+</html>
